@@ -1,0 +1,60 @@
+/*
+ * Consumo di carburante
+ * Programma che registra il consumo di carburante
+ * I guidatori sono interessati al consumo effettuato dalle loro automobili.
+ * Un guidatore ha tenuto traccia dei vari pieni di carburante, registrando
+ * le miglia percorse e i litri consumati per ogni pieno. Realizzare un 
+ * programma che utilizzi scanf per richiedere l'inserimento delle miglia
+ * percorse e dei litri consumati per ogni pieno. Il programma deve 
+ * calcolare e stampare le miglia per litro percorse per ogni pieno.
+ * Dopo aver processato tutte le informazioni di input, il programma 
+ * deve calcolare e stampare le miglia complessive per litro percorse 
+ * per tutti i pieni.
+ * 
+ * Top-down
+ * 
+ * 1st
+ * 
+ * inizializzazione delle variabili
+ * richiesta dati in input
+ * calcolo del dispendio per pieno
+ * calcolo totale
+ * esposizione risultati
+ * 
+ */
+
+
+#include <stdio.h>
+#include <limits.h>
+
+
+int main(int argc, char **argv)
+{
+	int kilomiters = 0;
+	double liters = 0;
+	int tot_kilomiters = 0;
+	double tot_liters = 0;
+	
+	printf("%s", "Enter km driven (-1 to end): ");
+	do{
+		scanf("%d", &kilomiters);
+		if(kilomiters < INT_MIN || kilomiters > INT_MAX){
+			printf("Invalid input, must be in [%d, %d] interval.",
+			 INT_MIN, INT_MAX);
+		}
+	}while (kilomiters < INT_MIN || kilomiters > INT_MAX);
+	
+	printf("%s", "Enter liters used (-1 to end): ");
+	do{
+		scanf("%d", &liters);
+		if(liters < DOUBLE_MIN || liters > DOUBLE_MAX){
+			printf("Invalid input, must be in [%d, %d] interval.",
+			 DOUBLE_MIN, DOUBLE_MAX);
+		}
+	}while (liters < DOUBLE_MIN || liters > DOUBLE_MAX);
+	
+	
+	
+	return 0;
+}
+
