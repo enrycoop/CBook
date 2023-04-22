@@ -10,8 +10,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include "basics.h"
 
 int main(void) {
-	puts("Array");
+	dice_textual_bar_graph_array();
 	return EXIT_SUCCESS;
 }
