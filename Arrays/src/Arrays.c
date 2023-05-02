@@ -11,8 +11,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "basics.h"
+#include "strings.h"
 
 int main(void) {
-	dice_textual_bar_graph_array();
+
 	return EXIT_SUCCESS;
 }
