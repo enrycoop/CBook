@@ -12,8 +12,10 @@
 #include <stdlib.h>
 #include "basics.h"
 #include "strings.h"
+#include "adv_arrays.h"
+#include "binary_search.h"
 
 int main(void) {
-
-	return EXIT_SUCCESS;
+	binary_main();
+	system("pause");
 }
