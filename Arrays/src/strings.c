@@ -5,6 +5,7 @@
  *      Author: enric
  */
 #define MAX_STRING_LENGTH 21
+#include <stdio.h>
 
 void sec_input_string() {
 	char string[MAX_STRING_LENGTH];
