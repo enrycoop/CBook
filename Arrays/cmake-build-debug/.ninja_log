@@ -1,0 +1,6 @@
+# ninja log v5
+13	347	7055990126235554	build.ninja	b96a6bc0af6e8f8
+5	180	7055989958884469	CMakeFiles/Arrays.dir/src/strings.c.obj	4c130512b2d5549f
+0	218	7055987822914298	CMakeFiles/Arrays.dir/src/Arrays.c.obj	eade6a8807efad55
+22	224	7055989411351490	CMakeFiles/Arrays.dir/src/basics.c.obj	1cd0640c96fd2858
+181	507	7055989961879009	Arrays.exe	73a3955ed641b8a1

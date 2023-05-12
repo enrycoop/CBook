@@ -10,7 +10,7 @@
 
 #define SIZE 10
 
-void bubbleSort(int * const array, size_t size);
+void bubbleSort(int* const array, size_t size);
 void printArray(const int* const array, size_t size);
 
 
