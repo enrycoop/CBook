@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/enrico/GitHub/CBook/Puntatori_esercitazioni/CardGame/build",
+  "command": "/usr/bin/cc   -g -std=gnu11 -o CMakeFiles/CardGame.dir/main.c.o -c /home/enrico/GitHub/CBook/Puntatori_esercitazioni/CardGame/main.c",
+  "file": "/home/enrico/GitHub/CBook/Puntatori_esercitazioni/CardGame/main.c"
+}
+]
