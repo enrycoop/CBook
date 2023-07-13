@@ -1,0 +1,11 @@
+[default]
+name=Default
+runtime=host
+toolchain=default
+config-opts=
+run-opts=
+prefix=/home/enrico/.cache/gnome-builder/install/CardGame/host
+app-id=
+postbuild=
+prebuild=
+run-command=
