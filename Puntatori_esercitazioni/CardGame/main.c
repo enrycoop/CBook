@@ -15,8 +15,8 @@ void shuffle(int deck[][FACES], void (*algorithm) (int deck[][FACES]));
 
 void deal(int deck[][FACES], const char* face[], const char* suit[]);
 
-void print_card(const char* face[], const char* suit[], size_t i_face, size_t y_suit) {
-     printf("%s di %s\n", face[i_face], suit[y_suit]);
+void print_card( const char* suit[],const char* face[], size_t i_suit, size_t y_face) {
+     printf("%s di %s\n", face[y_face], suit[i_suit]);
 }
 void find_card(int deck[][FACES], size_t card, size_t* row, size_t* column);
 
@@ -45,9 +45,9 @@ int main() {
     hand_deal(deck, &top_index, hand);
 
     for(int i = 0; i < HAND_SIZE; ++i) {
-        print_card(face, suit, hand[i][0], hand[i][1]);
+        print_card(suit, face, hand[i][0], hand[i][1]);
     }
-
+    printf("%s","\n----------------------------------\n");
     printf("Hand value is %i", eval_hand(hand));
 
 
@@ -56,7 +56,7 @@ int main() {
 
 int count_couples(int hand[HAND_SIZE][2]) {
     int value = 0;
-    for (int i = 0; i < HAND_SIZE/2; ++i) {
+    for (int i = 0; i < HAND_SIZE-1; ++i) {
         for (int j = i+1;j < HAND_SIZE; ++j) {
             if (hand[i][1] == hand[j][1])
                 value++;
@@ -64,18 +64,18 @@ int count_couples(int hand[HAND_SIZE][2]) {
     }
     return value;
 }
-int count_triplet(int hand[HAND_SIZE][2]);
+/*int count_triplet(int hand[HAND_SIZE][2]);
 int count_quartet(int hand[HAND_SIZE][2]);
 int same_color(int hand[HAND_SIZE][2]);
 int scale(int hand[HAND_SIZE][2]);
-
+*/
 int eval_hand(int hand[HAND_SIZE][2]){
     int value = 0;
     value += count_couples(hand);
-    value += count_triplet(hand);
+    /*value += count_triplet(hand);
     value += count_quartet(hand);
     value += same_color(hand);
-    value += scale(hand);
+    value += scale(hand);*/
     return value;
 }
 
@@ -108,24 +108,25 @@ void hand_deal(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]) {
     printf("%s", "START deal for hand...\n");
 #endif
 
-    size_t i_face = -1;
-    size_t y_suit = -1;
+
+    size_t i_suit = -1;
+    size_t y_face = -1;
     for (size_t card = 0; card < HAND_SIZE; ++card) {
 
 #if DEBUG == 1
         printf("\tdeal for %zu card...\n", card+1);
 #endif
-        i_face = -1;
-        y_suit = -1;
+        i_suit = -1;
+        y_face = -1;
         // trovo indirizzo carte
-        find_card(deck, *top_index,  &y_suit, &i_face);
+        find_card(deck, *top_index,  &i_suit, &y_face);
 
-        if (i_face != -1 && y_suit != -1) {
+        if (i_suit != -1 && y_face != -1) {
 #if DEBUG == 1
         printf("\t\tcard %zu found at deck(%zu, %zu) ...\n", *top_index, y_suit, i_face);
 #endif
-            hand[card][0] = i_face;
-            hand[card][1] = y_suit;
+            hand[card][0] = i_suit;
+            hand[card][1] = y_face;
             (*top_index) = (*top_index) + 1;
         }else {
 #if DEBUG == 1
@@ -141,20 +142,20 @@ void hand_deal(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]) {
 #endif
 }
 
-void deal(int deck[][FACES], const char* face[], const char* suit[]) {
+void deal(int deck[][FACES], const char* suit[], const char* face[]) {
     // definizione della funzione all'interno di una funzione per il principio del privilegio minimo
     //void find_card(int deck[][FACES], size_t card, size_t* row, size_t* column);
 
     // ciclo per tutte le carte
-    size_t i_face = -1;
-    size_t y_suit = -1;
+    size_t i_suit = -1;
+    size_t y_face = -1;
     for (size_t card = 0; card < CARDS; ++card) {
-        i_face = -1;
-        y_suit = -1;
+        i_suit = -1;
+        y_face = -1;
         // trovo indirizzo carte
-        find_card(deck, card,  &y_suit, &i_face);
-        if (i_face != -1 && y_suit != -1) {
-            print_card(face, suit, i_face, y_suit);
+        find_card(deck, card,  &i_suit, &y_face);
+        if (i_suit != -1 && y_face != -1) {
+            print_card(face, suit, i_suit, y_face);
         }
     }
 }
