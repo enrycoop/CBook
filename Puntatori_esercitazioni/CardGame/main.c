@@ -7,14 +7,17 @@
 #define CARDS 52
 #define HAND_SIZE 5
 
-#define DEBUG 0
+#define DEBUG 1
 
 void legacy_shuffle(int deck[][FACES]);
 //void quick_shuffle(int deck[][FACES]);
 void shuffle(int deck[][FACES], void (*algorithm) (int deck[][FACES]));
 void deal(int deck[][FACES], const char* face[], const char* suit[]);
-void print_card( const char* suit[],const char* face[], size_t i_suit, size_t y_face) {
-     printf("%s di %s\n", face[y_face], suit[i_suit]);
+void print_card( const char* suit[],const char* face[], size_t i_suit, size_t y_face, int hide) {
+    if(hide)
+        printf("%s di %s\n", "*******", "*******");
+    else
+        printf("%s di %s\n", face[y_face], suit[i_suit]);
 }
 void find_card(int deck[][FACES], size_t card, size_t* row, size_t* column);
 void hand_deal(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]);
@@ -25,10 +28,10 @@ void print_array(int array[], size_t size){
         printf("%d ", array[i]);
     printf("%s", "]\n");
 }
-void print_hand(int hand[HAND_SIZE][2],const char* suit[],const char* face[], const char* name){
+void print_hand(int hand[HAND_SIZE][2],const char* suit[],const char* face[], const char* name, int hide){
     printf("---------------- %s -----------------\n", name);
     for(int i = 0; i < HAND_SIZE; ++i) {
-        print_card(suit, face, hand[i][0], hand[i][1]);
+        print_card(suit, face, hand[i][0], hand[i][1], hide);
     }
     printf("-------------------------------------\n");
 }
@@ -57,8 +60,8 @@ int main() {
     hand_deal(deck, &top_index, player1);
     hand_deal(deck, &top_index, player2);
 
-    print_hand(player1, suit, face, "player1");
-    print_hand(player2, suit, face, "player2");
+    print_hand(player1, suit, face, "player1",1);
+    print_hand(player2, suit, face, "player2",0);
     int eval1 = eval_hand(player1);
     int eval2 = eval_hand(player2);
     printf("Hand value is %i\n", eval1);
@@ -137,7 +140,7 @@ int is_scale(int hand[HAND_SIZE][2]) {
         if(freq[i]==0)
             continue;
         if(freq[i]==1) {
-             int count = 0;
+            int count = 0;
             for(int j = i; j < FACES; ++j) {
                 if(freq[j]==1)
                     count++;
@@ -241,7 +244,7 @@ void deal(int deck[][FACES], const char* suit[], const char* face[]) {
         // trovo indirizzo carte
         find_card(deck, card,  &i_suit, &y_face);
         if (i_suit != -1 && y_face != -1) {
-            print_card(face, suit, i_suit, y_face);
+            print_card(face, suit, i_suit, y_face,0);
         }
     }
 }
