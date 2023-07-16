@@ -6,8 +6,9 @@
 #define FACES 13
 #define CARDS 52
 #define HAND_SIZE 5
+#define THRESHOLD 4
 
-#define DEBUG 1
+#define DEBUG 0
 
 void legacy_shuffle(int deck[][FACES]);
 //void quick_shuffle(int deck[][FACES]);
@@ -20,7 +21,8 @@ void print_card( const char* suit[],const char* face[], size_t i_suit, size_t y_
         printf("%s di %s\n", face[y_face], suit[i_suit]);
 }
 void find_card(int deck[][FACES], size_t card, size_t* row, size_t* column);
-void hand_deal(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]);
+void hand_deal(int deck[][FACES], size_t* top_index, int hand[][2], size_t cards);
+void AI_game(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]);
 int eval_hand(int hand[HAND_SIZE][2]);
 void print_array(int array[], size_t size){
     printf("%s", "\n[ ");
@@ -29,8 +31,12 @@ void print_array(int array[], size_t size){
     printf("%s", "]\n");
 }
 void print_hand(int hand[HAND_SIZE][2],const char* suit[],const char* face[], const char* name, int hide){
+#if DEBUG==1
+    hide = 0;
+#endif
     printf("---------------- %s -----------------\n", name);
     for(int i = 0; i < HAND_SIZE; ++i) {
+        printf("%d)",i+1);
         print_card(suit, face, hand[i][0], hand[i][1], hide);
     }
     printf("-------------------------------------\n");
@@ -53,21 +59,25 @@ int main() {
                                "Sei", "Sette", "Otto", "Nove", "Dieci",
                                "Jack", "Regina", "Re"};
 
-    int player1[HAND_SIZE][2] = {0};
+    int AI[HAND_SIZE][2] = {0};
     int player2[HAND_SIZE][2] = {0};
 
     size_t top_index = 0;
-    hand_deal(deck, &top_index, player1);
-    hand_deal(deck, &top_index, player2);
+    hand_deal(deck, &top_index, AI, HAND_SIZE);
+    hand_deal(deck, &top_index, player2, HAND_SIZE);
 
-    print_hand(player1, suit, face, "player1",1);
+    print_hand(AI, suit, face, "AI",1);
     print_hand(player2, suit, face, "player2",0);
-    int eval1 = eval_hand(player1);
+
+    AI_game(deck, &top_index, AI);
+
+    int eval1 = eval_hand(AI);
+
     int eval2 = eval_hand(player2);
     printf("Hand value is %i\n", eval1);
     printf("Hand value is %i\n", eval2);
     if(eval1 > eval2)
-        printf("Player 1 wins!!");
+        printf("AI wins!!");
     else if(eval2 > eval1)
         printf("Player 2 wins!!");
     else
@@ -190,7 +200,7 @@ void shuffle(int deck[][FACES], void (*algorithm) (int deck[][FACES])) {
 }
 
 
-void hand_deal(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]) {
+void hand_deal(int deck[][FACES], size_t* top_index, int hand[][2], size_t cards) {
 #if DEBUG == 1
     printf("%s","---------------------------------------------------------------\n");
     printf("%s", "START deal for hand...\n");
@@ -199,7 +209,7 @@ void hand_deal(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]) {
 
     size_t i_suit = -1;
     size_t y_face = -1;
-    for (size_t card = 0; card < HAND_SIZE; ++card) {
+    for (size_t card = 0; card < cards; ++card) {
 
 #if DEBUG == 1
         printf("\tdeal for %zu card...\n", card+1);
@@ -258,5 +268,121 @@ void find_card(int deck[][FACES], size_t card, size_t* row, size_t* column) {
                 return;
             }
         }
+    }
+}
+
+void handle_couple(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]) {
+
+    int freq[FACES] = {0};
+    for (int i = 0; i < HAND_SIZE; ++i)
+        freq[hand[i][1]]++;
+    int toChange = 0;
+    for (int i = 0; i < HAND_SIZE; ++i) {
+        if(freq[hand[i][1]] < 2 && freq[hand[i][1]] > 0) {
+            hand[i][1] = -1;
+            toChange++;
+        }
+    }
+    int deal[toChange][2];
+    hand_deal(deck, top_index,deal, toChange);
+
+    for(int i = 0; i < HAND_SIZE; ++i) {
+        if(hand[i][1] == -1) {
+            hand[i][0] = deal[toChange-1][0];
+            hand[i][1] = deal[toChange-1][1];
+            toChange--;
+            if(toChange == 0)
+                break;
+        }
+    }
+    //int deal[toChange][2] = {};
+}
+
+void handle_triplet(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]) {
+
+    int freq[FACES] = {0};
+    for (int i = 0; i < HAND_SIZE; ++i)
+        freq[hand[i][1]]++;
+    int toChange = 0;
+    for (int i = 0; i < HAND_SIZE; ++i) {
+        if(freq[hand[i][1]] < 3 && freq[hand[i][1]] > 0) {
+            hand[i][1] = -1;
+            toChange++;
+        }
+    }
+    int deal[toChange][2];
+    hand_deal(deck, top_index,deal, toChange);
+
+    for(int i = 0; i < HAND_SIZE; ++i) {
+        if(hand[i][1] == -1) {
+            hand[i][0] = deal[toChange-1][0];
+            hand[i][1] = deal[toChange-1][1];
+            toChange--;
+            if(toChange == 0)
+                break;
+        }
+    }
+    //int deal[toChange][2] = {};
+}
+
+void handle_quartet(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]) {
+
+    int freq[FACES] = {0};
+    for (int i = 0; i < HAND_SIZE; ++i)
+        freq[hand[i][1]]++;
+    int toChange = 0;
+    for (int i = 0; i < HAND_SIZE; ++i) {
+        if(freq[hand[i][1]] < 4 && freq[hand[i][1]] > 0) {
+            hand[i][1] = -1;
+            toChange++;
+        }
+    }
+    int deal[toChange][2];
+    hand_deal(deck, top_index,deal, toChange);
+
+    for(int i = 0; i < HAND_SIZE; ++i) {
+        if(hand[i][1] == -1) {
+            hand[i][0] = deal[toChange-1][0];
+            hand[i][1] = deal[toChange-1][1];
+            toChange--;
+            if(toChange == 0)
+                break;
+        }
+    }
+    //int deal[toChange][2] = {};
+}
+
+
+void AI_game(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]) {
+    int value = eval_hand(hand);
+#if DEBUG == 1
+    printf("AI: Found value = %d.\n", value);
+#endif
+
+    if(value > THRESHOLD)
+        return;
+    switch (value) {
+        case 0:
+            printf("AI: %s", "Change all cards..\n");
+            hand_deal(deck, top_index, hand, HAND_SIZE);
+            break;
+        case 1:
+            printf("AI: %s", "Change all cards but not the couple.\n");
+            handle_couple(deck, top_index, hand);
+            break;
+        case 2:
+            printf("AI: %s", "Change all cards but not the couples.\n");
+            handle_couple(deck, top_index, hand);
+            break;
+        case 3:
+            printf("AI: %s", "Change all cards but not the triplet.\n");
+            handle_triplet(deck, top_index, hand);
+            break;
+        case 4:
+            printf("AI: %s", "Change all cards but not the quartet.\n");
+            handle_quartet(deck, top_index, hand);
+            break;
+        default:
+            printf("AI: %s","The value is good");
     }
 }
