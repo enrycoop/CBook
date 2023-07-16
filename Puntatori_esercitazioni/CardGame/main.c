@@ -12,71 +12,155 @@
 void legacy_shuffle(int deck[][FACES]);
 //void quick_shuffle(int deck[][FACES]);
 void shuffle(int deck[][FACES], void (*algorithm) (int deck[][FACES]));
-
 void deal(int deck[][FACES], const char* face[], const char* suit[]);
-
 void print_card( const char* suit[],const char* face[], size_t i_suit, size_t y_face) {
      printf("%s di %s\n", face[y_face], suit[i_suit]);
 }
 void find_card(int deck[][FACES], size_t card, size_t* row, size_t* column);
-
-
 void hand_deal(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]);
-
 int eval_hand(int hand[HAND_SIZE][2]);
+void print_array(int array[], size_t size){
+    printf("%s", "\n[ ");
+    for (int i = 0; i < size; ++i)
+        printf("%d ", array[i]);
+    printf("%s", "]\n");
+}
+void print_hand(int hand[HAND_SIZE][2],const char* suit[],const char* face[], const char* name){
+    printf("---------------- %s -----------------\n", name);
+    for(int i = 0; i < HAND_SIZE; ++i) {
+        print_card(suit, face, hand[i][0], hand[i][1]);
+    }
+    printf("-------------------------------------\n");
+}
 
 
 int main() {
     // inizializzo tutti gli elementi dell'array bidimensionale a 0
     int deck[SUITS][FACES] = {0};
+
     //mischio il mazzo tramite numeri random usando il timer di sistema
     srand(time(NULL));
     shuffle(deck,legacy_shuffle);
 
     // inizializzo l'array con i semi
     const char* suit[SUITS] = {"Cuori", "Quadri", "Fiori", "Spade"};
+
     // inizializzo l'array con le facce
     const char* face[FACES] = {"Asso", "Due", "Tre", "Quattro", "Cinque",
                                "Sei", "Sette", "Otto", "Nove", "Dieci",
                                "Jack", "Regina", "Re"};
-    //deal(deck, face, suit);
-    int hand[HAND_SIZE][2] = {0};
+
+    int player1[HAND_SIZE][2] = {0};
+    int player2[HAND_SIZE][2] = {0};
+
     size_t top_index = 0;
-    hand_deal(deck, &top_index, hand);
+    hand_deal(deck, &top_index, player1);
+    hand_deal(deck, &top_index, player2);
 
-    for(int i = 0; i < HAND_SIZE; ++i) {
-        print_card(suit, face, hand[i][0], hand[i][1]);
-    }
-    printf("%s","\n----------------------------------\n");
-    printf("Hand value is %i", eval_hand(hand));
-
+    print_hand(player1, suit, face, "player1");
+    print_hand(player2, suit, face, "player2");
+    int eval1 = eval_hand(player1);
+    int eval2 = eval_hand(player2);
+    printf("Hand value is %i\n", eval1);
+    printf("Hand value is %i\n", eval2);
+    if(eval1 > eval2)
+        printf("Player 1 wins!!");
+    else if(eval2 > eval1)
+        printf("Player 2 wins!!");
+    else
+        printf("No one is the winner!");
 
     return 0;
 }
 
+
+/////////////////////// FUNCTIONS //////////////////////////////////////////////////////
+
 int count_couples(int hand[HAND_SIZE][2]) {
     int value = 0;
-    for (int i = 0; i < HAND_SIZE-1; ++i) {
-        for (int j = i+1;j < HAND_SIZE; ++j) {
-            if (hand[i][1] == hand[j][1])
-                value++;
-        }
-    }
+    int freq[FACES] = {0};
+    for (int i = 0; i < HAND_SIZE; ++i)
+        freq[hand[i][1]]++;
+    for (int i = 0; i< FACES; ++i)
+        if(freq[i]==2)
+            value++;
     return value;
 }
-/*int count_triplet(int hand[HAND_SIZE][2]);
-int count_quartet(int hand[HAND_SIZE][2]);
-int same_color(int hand[HAND_SIZE][2]);
-int scale(int hand[HAND_SIZE][2]);
-*/
+
+int count_triplet(int hand[HAND_SIZE][2]) {
+    int freq[FACES] = {0};
+    for (int i = 0; i < HAND_SIZE; ++i)
+        freq[hand[i][1]]++;
+    for (int i = 0; i< FACES; ++i)
+        if(freq[i]==3)
+            return 3;
+    return 0;
+}
+
+int count_quartet(int hand[HAND_SIZE][2]) {
+    int freq[FACES] = {0};
+    for (int i = 0; i < HAND_SIZE; ++i)
+        freq[hand[i][1]]++;
+    for (int i = 0; i< FACES; ++i)
+        if(freq[i]==4)
+            return 4;
+    return 0;
+}
+
+int same_color(int hand[HAND_SIZE][2]) {
+    int freq[SUITS] = {0};
+    for (int i = 0; i < HAND_SIZE; ++i)
+        freq[hand[i][0]]++;
+#if DEBUG==1
+    printf("COLOR");
+    print_array(freq,SUITS);
+#endif
+    for (int i = 0; i< SUITS; ++i)
+        if(freq[i]==HAND_SIZE)
+            return 5;
+    return 0;
+}
+
+// [0 0 1 1 1 1 1 0 0 0 0 0]
+int is_scale(int hand[HAND_SIZE][2]) {
+    int freq[FACES] = {0};
+    for (int i = 0; i < HAND_SIZE; ++i)
+        freq[hand[i][1]]++;
+#if DEBUG==1
+    printf("FACES");
+    print_array(freq,FACES);
+#endif
+
+    for (int i = 0; i< FACES; ++i) {
+        if(freq[i]>1)
+            return 0;
+        if(freq[i]==0)
+            continue;
+        if(freq[i]==1) {
+             int count = 0;
+            for(int j = i; j < FACES; ++j) {
+                if(freq[j]==1)
+                    count++;
+                if(freq[j]==2 || freq[j]==0)
+                    break;
+            }
+            if (count==HAND_SIZE)
+                return 6;
+        }
+    }
+    return 0;
+}
+
+
+
 int eval_hand(int hand[HAND_SIZE][2]){
-    int value = 0;
-    value += count_couples(hand);
-    /*value += count_triplet(hand);
-    value += count_quartet(hand);
-    value += same_color(hand);
-    value += scale(hand);*/
-    return value;
+
+    if(is_scale(hand) > 0) return 6;
+    if(same_color(hand) > 0) return 5;
+    if(count_quartet(hand) > 0) return 4;
+    if(count_triplet(hand) > 0) return 3;
+
+    return count_couples(hand);
 }
 
 void legacy_shuffle(int deck[][FACES]) {
@@ -105,6 +189,7 @@ void shuffle(int deck[][FACES], void (*algorithm) (int deck[][FACES])) {
 
 void hand_deal(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]) {
 #if DEBUG == 1
+    printf("%s","---------------------------------------------------------------\n");
     printf("%s", "START deal for hand...\n");
 #endif
 
@@ -123,7 +208,7 @@ void hand_deal(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]) {
 
         if (i_suit != -1 && y_face != -1) {
 #if DEBUG == 1
-        printf("\t\tcard %zu found at deck(%zu, %zu) ...\n", *top_index, y_suit, i_face);
+        printf("\t\tcard %zu found at deck(%zu, %zu) ...\n", *top_index, i_suit, y_face);
 #endif
             hand[card][0] = i_suit;
             hand[card][1] = y_face;
@@ -139,6 +224,7 @@ void hand_deal(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]) {
     }
 #if DEBUG == 1
     printf("%s", "END deal for hand.\n");
+    printf("%s","---------------------------------------------------------------\n");
 #endif
 }
 
