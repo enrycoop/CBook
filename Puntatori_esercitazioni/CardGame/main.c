@@ -1,6 +1,8 @@
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 
 #define SUITS 4
 #define FACES 13
@@ -9,6 +11,27 @@
 #define THRESHOLD 4
 
 #define DEBUG 0
+
+
+void splash_screen(const char* titles[], size_t lines) {
+    printf("%s", "******************************************************************************\n");
+    for(int i = 0; i < lines; ++i) {
+        printf("%s", "*");
+        int spaces = (80-strlen(titles[i]))/2 - 1;
+
+        for(int j = 0; j < spaces-1; ++j) {
+            printf("%s", " ");
+        }
+        printf("%s", titles[i]);
+        for(int j = 0; j < spaces-1; ++j) {
+            printf("%s", " ");
+        }
+        if(strlen(titles[i])%2!=0)
+            printf(" ");
+        printf("%s", "*\n");
+    }
+    printf("%s", "******************************************************************************\n");
+}
 
 void legacy_shuffle(int deck[][FACES]);
 //void quick_shuffle(int deck[][FACES]);
@@ -43,7 +66,24 @@ void print_hand(int hand[HAND_SIZE][2],const char* suit[],const char* face[], co
 }
 
 
+
 int main() {
+    const char* titles[] = {"Welcome to Card Game", "made by Enrico Coppolecchia"};
+    splash_screen(titles, 2);
+
+    printf("insert your name: ");
+    char *name;
+    int bufsize = 150;
+    name = (char *)malloc(bufsize * sizeof(char));
+    if(name == NULL) {
+        perror("Unable to allocate buffer\n");
+        exit(1);
+    }
+    fgets(name, bufsize, stdin);
+    int len = strlen(name);
+    if(name[len-1] == '\n') name[len-1] = 0;
+    //scanf("%20s", name);
+
     // inizializzo tutti gli elementi dell'array bidimensionale a 0
     int deck[SUITS][FACES] = {0};
 
@@ -67,7 +107,7 @@ int main() {
     hand_deal(deck, &top_index, player2, HAND_SIZE);
 
     print_hand(AI, suit, face, "AI",1);
-    print_hand(player2, suit, face, "player2",0);
+    print_hand(player2, suit, face, name,0);
 
     AI_game(deck, &top_index, AI);
 

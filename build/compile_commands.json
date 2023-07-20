@@ -1,0 +1,8 @@
+[
+{
+  "directory": "C:/Users/enric/Documents/GitHub/CBook/build",
+  "command": "C:\\msys64\\mingw64\\bin\\gcc.exe   -g -std=gnu11 -o CMakeFiles\\CardGame.dir\\main.c.obj -c C:\\Users\\enric\\Documents\\GitHub\\CBook\\Puntatori_esercitazioni\\CardGame\\main.c",
+  "file": "C:/Users/enric/Documents/GitHub/CBook/Puntatori_esercitazioni/CardGame/main.c",
+  "output": "CMakeFiles/CardGame.dir/main.c.obj"
+}
+]

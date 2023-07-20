@@ -1,0 +1,3 @@
+C:/Users/enric/Documents/GitHub/CBook/build/CMakeFiles/CardGame.dir
+C:/Users/enric/Documents/GitHub/CBook/build/CMakeFiles/edit_cache.dir
+C:/Users/enric/Documents/GitHub/CBook/build/CMakeFiles/rebuild_cache.dir
