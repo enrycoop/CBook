@@ -6,7 +6,7 @@
 			[
 				{
 					"build" : ".",
-					"jsonFile" : "directory-.-Debug-d0094a50bb2071803777.json",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.25"
@@ -39,7 +39,7 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "CardGame::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-CardGame-Debug-4eee17c0688e48d10da5.json",
+					"jsonFile" : "target-CardGame-Debug-dc8b88e7db6f77be91e6.json",
 					"name" : "CardGame",
 					"projectIndex" : 0
 				}
@@ -49,12 +49,12 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "C:/Users/enric/CLionProjects/CBook/Puntatori_esercitazioni/CardGame/cmake-build-debug",
-		"source" : "C:/Users/enric/CLionProjects/CBook/Puntatori_esercitazioni/CardGame"
+		"build" : "/home/enrico/Documenti/GitHub/CBook/Puntatori_esercitazioni/CardGame/cmake-build-debug",
+		"source" : "/home/enrico/Documenti/GitHub/CBook/Puntatori_esercitazioni/CardGame"
 	},
 	"version" : 
 	{
 		"major" : 2,
-		"minor" : 4
+		"minor" : 5
 	}
 }

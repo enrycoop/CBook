@@ -1,10 +1,10 @@
-"C:\Users\enric\AppData\Local\JetBrains\CLion 2023.1.2\bin\cmake\win\x64\bin\cmake.exe" -DCMAKE_BUILD_TYPE=Debug "-DCMAKE_MAKE_PROGRAM=C:/Users/enric/AppData/Local/JetBrains/CLion 2023.1.2/bin/ninja/win/x64/ninja.exe" -G Ninja -S C:\Users\enric\CLionProjects\CBook\Puntatori_esercitazioni\CardGame -B C:\Users\enric\CLionProjects\CBook\Puntatori_esercitazioni\CardGame\cmake-build-debug
--- The C compiler identification is GNU 11.2.0
+/home/enrico/.local/share/JetBrains/Toolbox/apps/clion/bin/cmake/linux/x64/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" -S /home/enrico/Documenti/GitHub/CBook/Puntatori_esercitazioni/CardGame -B /home/enrico/Documenti/GitHub/CBook/Puntatori_esercitazioni/CardGame/cmake-build-debug
+-- The C compiler identification is GNU 13.2.1
 -- Detecting C compiler ABI info
 -- Detecting C compiler ABI info - done
--- Check for working C compiler: C:/Users/enric/AppData/Local/JetBrains/CLion 2023.1.2/bin/mingw/bin/gcc.exe - skipped
+-- Check for working C compiler: /usr/bin/cc - skipped
 -- Detecting C compile features
 -- Detecting C compile features - done
--- Configuring done
--- Generating done
--- Build files have been written to: C:/Users/enric/CLionProjects/CBook/Puntatori_esercitazioni/CardGame/cmake-build-debug
+-- Configuring done (0.5s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/enrico/Documenti/GitHub/CBook/Puntatori_esercitazioni/CardGame/cmake-build-debug

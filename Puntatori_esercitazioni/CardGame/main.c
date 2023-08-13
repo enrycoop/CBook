@@ -33,6 +33,7 @@ void splash_screen(const char* titles[], size_t lines) {
     printf("%s", "******************************************************************************\n");
 }
 
+void player_game(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]);
 void legacy_shuffle(int deck[][FACES]);
 //void quick_shuffle(int deck[][FACES]);
 void shuffle(int deck[][FACES], void (*algorithm) (int deck[][FACES]));
@@ -111,9 +112,14 @@ int main() {
 
     AI_game(deck, &top_index, AI);
 
+    player_game(deck, &top_index, player2);
+
     int eval1 = eval_hand(AI);
 
     int eval2 = eval_hand(player2);
+
+    print_hand(AI, suit, face, "AI",0);
+    print_hand(player2, suit, face, name,0);
     printf("Hand value is %i\n", eval1);
     printf("Hand value is %i\n", eval2);
     if(eval1 > eval2)
@@ -270,7 +276,7 @@ void hand_deal(int deck[][FACES], size_t* top_index, int hand[][2], size_t cards
 #if DEBUG == 1
             printf("\t\tcard %zu not found \n", card);
 #endif
-            printf("FATAL! deck not completely shuffled!");
+            printf("FATAL: memory corruption!");
             break;
         }
 
@@ -315,7 +321,7 @@ void handle_couple(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2])
 
     int freq[FACES] = {0};
     for (int i = 0; i < HAND_SIZE; ++i)
-        freq[hand[i][1]]++;
+        freq[hand[i][1]]++; // conta le frequenze di una carta con un array di frequenze
     int toChange = 0;
     for (int i = 0; i < HAND_SIZE; ++i) {
         if(freq[hand[i][1]] < 2 && freq[hand[i][1]] > 0) {
@@ -424,5 +430,35 @@ void AI_game(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]) {
             break;
         default:
             printf("AI: %s","The value is good");
+    }
+}
+
+
+void player_game(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]) {
+    int cardChoosed = 0;
+    int choose = HAND_SIZE;
+    int choosen[HAND_SIZE] = {0};
+    while(cardChoosed<HAND_SIZE && choose!=-1){
+        do{
+            printf("Insert a number between [%d, %d] in order to change card or -1 to stop: ", 0, HAND_SIZE-1);
+            scanf("%d", &choose);
+        }while(choose<-1 && choose >= HAND_SIZE);
+        if(choose == -1)
+            break;
+        choosen[choose] = 1;
+        cardChoosed++;
+    }
+
+    int deal[cardChoosed][2];
+    hand_deal(deck, top_index,deal, cardChoosed);
+
+    for(int i = 0; i < HAND_SIZE; ++i) {
+        if(choosen[i] == 1) {
+            hand[i][0] = deal[cardChoosed-1][0];
+            hand[i][1] = deal[cardChoosed-1][1];
+            cardChoosed--;
+            if(cardChoosed == 0)
+                break;
+        }
     }
 }
