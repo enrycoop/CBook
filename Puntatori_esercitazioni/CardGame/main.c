@@ -35,6 +35,7 @@ void splash_screen(const char* titles[], size_t lines) {
 
 void player_game(int deck[][FACES], size_t* top_index, int hand[HAND_SIZE][2]);
 void legacy_shuffle(int deck[][FACES]);
+void efficient_shuffle(int deck[][FACES]);
 //void quick_shuffle(int deck[][FACES]);
 void shuffle(int deck[][FACES], void (*algorithm) (int deck[][FACES]));
 void deal(int deck[][FACES], const char* face[], const char* suit[]);
@@ -90,7 +91,7 @@ int main() {
 
     //mischio il mazzo tramite numeri random usando il timer di sistema
     srand(time(NULL));
-    shuffle(deck,legacy_shuffle);
+    shuffle(deck,efficient_shuffle);
 
     // inizializzo l'array con i semi
     const char* suit[SUITS] = {"Cuori", "Quadri", "Fiori", "Spade"};
@@ -221,6 +222,31 @@ int eval_hand(int hand[HAND_SIZE][2]){
 
     return count_couples(hand);
 }
+
+
+void efficient_shuffle(int deck[][FACES]) {
+    int card = 0;
+    for(int i=0; i<SUITS; ++i){
+        for (int j=0; j<FACES; ++j){
+            deck[i][j] = card;
+            card++;
+        }
+    }
+
+    int row = 0;
+    int column = 0;
+    int temp;
+    for(int i=0; i<SUITS; ++i){
+        for (int j=0; j<FACES; ++j){
+            row = rand() % SUITS;
+            column = rand() % FACES;
+            temp = deck[i][j];
+            deck[i][j] = deck[row][column];
+            deck[row][column] = temp;
+        }
+    }
+}
+
 
 void legacy_shuffle(int deck[][FACES]) {
     for(size_t card = 0; card < CARDS; ++card) {
